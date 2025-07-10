@@ -110,4 +110,4 @@ const updateProfile = async (req, res) => {
   }
 };
 
-export { userSignUp, userLogin };
+export { userSignUp, userLogin, checkAuth, updateProfile };
