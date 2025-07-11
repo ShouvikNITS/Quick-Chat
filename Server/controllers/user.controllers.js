@@ -4,7 +4,7 @@ import { User } from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 
 const userSignUp = async (req, res) => {
-  const [fullname, email, password, bio] = req.body;
+  const {fullname, email, password, bio} = req.body;
 
   try {
     if (!fullname || !email || !password || !bio) {
@@ -21,12 +21,12 @@ const userSignUp = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create(
+    const newUser = await User.create({
       fullname,
       email,
-      (password = hashedPassword),
+      password: hashedPassword,
       bio
-    );
+    });
 
     const token = generateToken(newUser._id);
 
@@ -43,7 +43,7 @@ const userSignUp = async (req, res) => {
 };
 
 const userLogin = async (req, res) => {
-  const [email, password] = req.body;
+  const {email, password} = req.body;
 
   try {
     const userData = await User.findOne({ email });
@@ -82,7 +82,7 @@ const updateProfile = async (req, res) => {
     let updatedUser;
 
     if (!profileImg) {
-      updatedUser = await User.findById(
+      updatedUser = await User.findByIdAndUpdate(
         userId,
         {
           bio,
@@ -92,9 +92,9 @@ const updateProfile = async (req, res) => {
       );
     }
     else{
-        const upload = await cloudinary.uploader.upload(profileImg)
+        const upload = await cloudinary.uploader.upload(profileImg, { resource_type: "auto" });
 
-        updatedUser = await User.findById(
+        updatedUser = await User.findByIdAndUpdate(
         userId,
         {
           bio,

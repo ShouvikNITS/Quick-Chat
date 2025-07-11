@@ -7,11 +7,11 @@ import { io } from "socket.io-client"
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 axios.defaults.baseURL = backendUrl
 
-const authcontext = createContext()
+const AuthContext = createContext()
 
-const authProvider = ({children}) => {
+const AuthProvider = ({children}) => {
 
-    const {token, setToken} = useState(localStorage.getItem("token"))
+    const [token, setToken] = useState(localStorage.getItem("token"))
     const [authUser, setAuthUser] = useState(null)
     const [onlineUser, setOnlineUser] = useState([])
     const [socket, setSocket] = useState(null)
@@ -47,7 +47,7 @@ const authProvider = ({children}) => {
                 toast.error(data.message)
             }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.message)
         }
     }
 
@@ -58,7 +58,7 @@ const authProvider = ({children}) => {
         setOnlineUser([])
         axios.defaults.headers.common["token"] = null
         toast.success("Logged out successfully")
-        socket.disconnect()
+        if (socket) socket.disconnect()
     }
 
     const updateProfile = async(body) => {
@@ -107,11 +107,11 @@ const authProvider = ({children}) => {
     }
 
     return (
-        <authcontext.Provider value={value}>
+        <AuthContext.Provider value={value}>
             {children}
-        </authcontext.Provider>
+        </AuthContext.Provider>
     )
 }
 
 
-export {authcontext, authProvider}
+export {AuthContext, AuthProvider}

@@ -3,11 +3,13 @@ import assets from "../assets/assets";
 
 const Loginpage = () => {
   const [currentState, setCurrentState] = useState("Sign Up");
-  const [fullName, setFullName] = useState("");
+  const [fullname, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [bio, setBio] = useState("");
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
+
+  
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
@@ -43,7 +45,7 @@ const Loginpage = () => {
         {currentState === "Sign Up" && !isDataSubmitted && (
           <input
             onChange={(e) => setFullName(e.target.value)}
-            value={fullName}
+            value={fullname}
             type="text"
             className=" p-2 border border-gray-500 rounded-md focus:outline-none"
             placeholder="FullName"
