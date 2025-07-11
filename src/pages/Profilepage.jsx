@@ -1,17 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
+import { AuthContext } from "../../context/AuthContext";
 
 const Profilepage = () => {
 
+  const { authUser, updateProfile} = useContext(AuthContext)
+
   const [selectedImg, setSelectedImg] = useState(null);
   const navigate = useNavigate();
-  const [name, setName] = useState("Martin Johnson")
-  const [bio, setBio] = useState("Hello Everyone")
+  const [name, setName] = useState(authUser.fullname)
+  const [bio, setBio] = useState(authUser.bio)
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    navigate("/")
+    if(!selectedImg){
+      await updateProfile({fullname: name, bio})
+      navigate("/")
+      return
+    }
+
+    const reader = new FileReader()
+    reader.readAsDataURL(selectedImg)
+    reader.onload = async () => {
+      const base64Image = reader.result
+      await updateProfile({profileImg: base64Image, fullname: name, bio})
+      navigate('/')
+    }
+
+
   }
 
   return (
@@ -28,7 +45,7 @@ const Profilepage = () => {
           <textarea onChange={(e) => setBio(e.target.value)} value={bio} placeholder="Write your Bio" required rows={4}  className=" p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
           <button type="submit" className=" bg-gradient-to-r from-purple-400 to-violet-600 text-white p-2 rounded-full text-lg cursor-pointer">Update Profile</button>
         </form>
-        <img className=" max-w-44 aspect-square mx-10 max-sm:mt-10" src={assets.logo_icon} alt="" />
+        <img className={` max-w-44 aspect-square mx-10 max-sm:mt-10 ${selectedImg && ' rounded-full'}`} src={authUser?.profileImg || assets.logo_icon} alt="" />
       </div>
     </div>
   );
