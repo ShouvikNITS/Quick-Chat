@@ -15,12 +15,16 @@ const Loginpage = () => {
   const onSubmitHandler = (event) => {
     event.preventDefault();
 
-    if (currentState === "Sign Up" && !isDataSubmitted) {
-      setIsDataSubmitted(true);
-      return
+    try {
+      if (currentState === "Sign Up" && !isDataSubmitted) {
+        setIsDataSubmitted(true);
+        return
+      }
+  
+      login(currentState === "Sign Up" ? "signup" : "login", {fullname, email, password, bio})
+    } catch (error) {
+      console.log(error.message)
     }
-
-    login(currentState === "Sign Up" ? "signup" : "login", {fullname, email, password, bio})
   };
 
   return (
@@ -97,7 +101,7 @@ const Loginpage = () => {
         </button>
 
         <div className={` flex items-center gap-2 text-sm text-gray-500 ${currentState !== "Sign Up" ? " hidden" : "block"}`}>
-          <input type="checkbox" required/>
+          <input type="checkbox" />
           <p>
             I agree to all{" "}
             <span className=" font-medium text-violet-500 cursor-pointer">

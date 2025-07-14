@@ -22,10 +22,8 @@ const AuthProvider = ({children}) => {
             const {data} = await axios.get("/api/auth/check")
             if(data.success) {
                 setAuthUser(data.user)
+                connectSocket(data.user)
             }
-
-            connectSocket(data.user)
-
 
         } catch (error) {
             toast.error(error.message)
@@ -35,7 +33,7 @@ const AuthProvider = ({children}) => {
     const login = async(state, credentials) => {
         try {
             const {data} = await axios.post(`/api/auth/${state}`, credentials)
-            if(data) {
+            if(data.success) {
                 setAuthUser(data.userData)
                 connectSocket(data.userData)
                 axios.defaults.headers.common["token"] = data.token
@@ -58,7 +56,7 @@ const AuthProvider = ({children}) => {
         setOnlineUser([])
         axios.defaults.headers.common["token"] = null
         toast.success("Logged out successfully")
-        if (socket) socket.disconnect()
+        socket.disconnect()
     }
 
     const updateProfile = async(body) => {

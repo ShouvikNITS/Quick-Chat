@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import assets, { messagesDummyData } from '../assets/assets'
 import { formatMsgTime } from '../lib/utils'
 
-const ChatContainer = ({ selectedUser, setSelectUser }) => {
+const ChatContainer = () => {
+
+  
 
   const scrollEnd = useRef()
 
