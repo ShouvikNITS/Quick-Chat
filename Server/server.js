@@ -49,10 +49,12 @@ app.use("/api/messages", messageRouter)
 await connectDb()
 
 
+if (process.env.NODE_ENV !== "production") {
+    
+    server.listen(process.env.PORT || 5000, () => {
+        console.log(`Server is live at port: ${process.env.PORT || 5000}`);
+    })
+}
 
-server.listen(process.env.PORT || 5000, () => {
-    console.log(`Server is live at port: ${process.env.PORT || 5000}`);
-})
 
-
-export {io, userSocketMap}
+export {io, userSocketMap, server}
