@@ -56,5 +56,5 @@ if (process.env.NODE_ENV !== "production") {
     })
 }
 
-
-export {io, userSocketMap, server}
+export default server
+export {io, userSocketMap}
