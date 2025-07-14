@@ -58,18 +58,19 @@ const ChatProvider = ({children}) => {
         }
     }
 
-    const subToMessage = () => {
+    const subToMessage = async() => {
         if(!socket) return;
 
         socket.on("newMessage", (newMessage) => {
             if(selectedUser && newMessage.senderId === selectedUser._id){
                 newMessage.seen = true
-                setMessages((prevMsg) => [...prevMsg, newMessage])
+                setMessages((prevUnseenMsg) => [...prevUnseenMsg, newMessage])
                 axios.put(`/api/messages/mark/${newMessage._id}`)
             }
             else{
-                setUnseenMessages((prevUnseenMsg) => ({
-                    ...prevUnseenMsg, [newMessage.senderId] : prevUnseenMsg[newMessage.senderId] ? prevUnseenMsg[newMessage.senderId] + 1 : 1
+                setUnseenMessages((prevUnseenMsg={}) => ({
+                    ...prevUnseenMsg,
+                    [newMessage.senderId] : prevUnseenMsg[newMessage.senderId] ? prevUnseenMsg[newMessage.senderId] + 1 : 1
                 }))
             }
         })
@@ -95,7 +96,7 @@ const ChatProvider = ({children}) => {
         users,
         selectedUser,
         getUsers,
-        setMessages,
+        getMessages,
         sendMsg,
         setSelectedUser,
         unseenMessages,

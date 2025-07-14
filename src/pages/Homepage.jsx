@@ -14,7 +14,7 @@ const Homepage = () => {
                       ${selectedUser ? ' md:grid-cols-[1fr_1.5fr_1fr] xl:grid-cols-[1fr_2fr_1fr]' : ' grid-cols-2'}`}>
       <Sidebar />
       <ChatContainer />
-      <RightSidebar selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+      <RightSidebar />
     </div>
     </div>
   )
